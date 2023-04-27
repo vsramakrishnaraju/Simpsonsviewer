@@ -5,35 +5,38 @@
 //  Created by Venkata K on 4/26/23.
 //
 import UIKit
-import SDWebImage
 import SwiftSoup
+import SDWebImage
 
 class CharacterDetailViewController: UIViewController {
 
     var character: Character?
+    private let imageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let descriptionLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .white
 
-        let imageView = UIImageView()
+        // Add subviews
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         view.addSubview(imageView)
 
-        let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         nameLabel.numberOfLines = 0
         nameLabel.lineBreakMode = .byWordWrapping
         view.addSubview(nameLabel)
 
-        let descriptionLabel = UILabel()
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
         view.addSubview(descriptionLabel)
 
+        // Set constraints
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -50,22 +53,15 @@ class CharacterDetailViewController: UIViewController {
             descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
 
+        // Populate views
         if let character = character {
             nameLabel.text = character.name
             descriptionLabel.text = character.description
             
-            if let wikipediaURL = URL(string: character.description) {
-                fetchImageFromWikipedia(url: wikipediaURL) { imageUrl in
-                    DispatchQueue.main.async {
-                        if let imageUrl = imageUrl {
-                            imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "default-character"))
-                        } else {
-                            imageView.image = UIImage(named: "default-character")
-                        }
-                    }
-                }
+            if let imageUrlString = character.imageUrl, let imageUrl = URL(string: imageUrlString) {
+                imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(named: "error"))
             } else {
-                imageView.image = UIImage(named: "default-character")
+                imageView.image = UIImage(named: "error")
             }
         }
     }
@@ -91,4 +87,5 @@ class CharacterDetailViewController: UIViewController {
             }
         }.resume()
     }
+
 }

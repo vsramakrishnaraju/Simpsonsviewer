@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct Character {
+class Character {
     let name: String
     let description: String
-    let imageURL: String
+    let imageUrl: String?
+
+    init(name: String, description: String, imageUrl: String?) {
+        self.name = name
+        self.description = description
+        self.imageUrl = imageUrl
+    }
 }

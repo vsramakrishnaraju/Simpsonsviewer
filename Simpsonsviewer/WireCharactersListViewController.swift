@@ -40,12 +40,14 @@ class WireCharactersListViewController: UITableViewController, UISearchResultsUp
                        let relatedTopics = jsonResponse["RelatedTopics"] as? [[String: Any]] {
                         self.characters = relatedTopics.compactMap { relatedTopic in
                             guard let name = relatedTopic["Text"] as? String,
-                                  let description = relatedTopic["FirstURL"] as? String,
-                                  let icon = relatedTopic["Icon"] as? [String: Any],
-                                  let imageURL = icon["URL"] as? String else {
+                                  let description = relatedTopic["FirstURL"] as? String else {
                                 return nil
                             }
-                            return Character(name: name, description: description, imageURL: imageURL)
+
+                            let icon = relatedTopic["Icon"] as? [String: Any]
+                            let imageUrl = icon?["URL"] as? String
+
+                            return Character(name: name, description: description, imageUrl: "https://duckduckgo.com"+(imageUrl ?? ""))
                         }
 
                         DispatchQueue.main.async {
@@ -58,6 +60,7 @@ class WireCharactersListViewController: UITableViewController, UISearchResultsUp
             }
         }.resume()
     }
+
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredCharacters.isEmpty ? characters.count : filteredCharacters.count

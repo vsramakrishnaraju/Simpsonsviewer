@@ -28,11 +28,12 @@ class SimpsonsCharactersListViewController: UITableViewController, UISearchResul
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
-
+    
     func fetchCharacters() {
         guard let url = URL(string: "https://api.duckduckgo.com/?q=simpsons+characters&format=json") else {
             return
         }
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
                 do {
@@ -40,12 +41,14 @@ class SimpsonsCharactersListViewController: UITableViewController, UISearchResul
                        let relatedTopics = jsonResponse["RelatedTopics"] as? [[String: Any]] {
                         self.characters = relatedTopics.compactMap { relatedTopic in
                             guard let name = relatedTopic["Text"] as? String,
-                                  let description = relatedTopic["FirstURL"] as? String,
-                                  let icon = relatedTopic["Icon"] as? [String: Any],
-                                  let imageURL = icon["URL"] as? String else {
+                                  let description = relatedTopic["FirstURL"] as? String else {
                                 return nil
                             }
-                            return Character(name: name, description: description, imageURL: imageURL)
+
+                            let icon = relatedTopic["Icon"] as? [String: Any]
+                            let imageUrl = icon?["URL"] as? String
+
+                            return Character(name: name, description: description, imageUrl: "https://duckduckgo.com"+(imageUrl ?? ""))
                         }
 
                         DispatchQueue.main.async {

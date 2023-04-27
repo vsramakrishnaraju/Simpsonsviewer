@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "20df851f2ae27efbaeeff73e9babdf4fd839a144"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup",
+      "state" : {
+        "revision" : "f707b8680cddb96dc1855632340a572ef37bbb98",
+        "version" : "2.5.3"
+      }
+    }
+  ],
+  "version" : 2
+}
